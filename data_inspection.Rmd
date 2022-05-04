@@ -52,7 +52,7 @@ kable(column_names)
 ```
 Let's look at the first 5 rows in this file. It's a large chunk, but very interesting. Scroll side to side to see the whole chunk. 
 ```{r}
-kable(bdj[1:5, ])
+kable(bdj[1:5])
 ```
 From this point, we can pick out columns that we want to work with. For practice, I will select the phylum-subspecies taxID and name columns (14 columns total) and convert them to factor. After this (hidden) code chunk, the "bdj" object (our data) columns with these names will be converted from "numeric" or "character" to "factor". Since they are now factors, we can run other analyses on them and visualize how many of each, etc. 
 
@@ -228,8 +228,9 @@ mySequences
 ```
 Next align the sequences. 
 ```{r}
-myFirstAlignment <- msa(mySequences)
-myFirstAlignmentconvert <- myFirstAlignment
+#The below code is extremely taxing and produces an incorrect alignment. 
+#myFirstAlignment <- msa(mySequences)
+#myFirstAlignmentconvert <- myFirstAlignment
 ```
 
 
