@@ -166,7 +166,7 @@ seqlist<- as.data.frame(matrix(unlist(sequence_df, use.names = FALSE), ncol = 4,
 seqlist1=seqlist
 colnames(seqlist1) = c("id", "name", "gene", "sequence")
 
-seqlist2 <- as.tibble(seqlist1) %>%select(1,4)
+seqlist2 <- as.tibble(seqlist1) %>%select(1,2,4)
 ```
 
 now seqlist2 contains the data we need to merge with our original file
@@ -202,138 +202,46 @@ Credit for below code: https://stackoverflow.com/questions/26973029/split-one-ro
 
 
 ```{r}
-seqlist2<- as.data.frame(matrix(unlist(sequence_df2, use.names = FALSE), ncol = 4, byrow= TRUE))
+seqlist2.1<- as.data.frame(matrix(unlist(sequence_df2, use.names = FALSE), ncol = 3, byrow= TRUE))
 ```
 
 ```{r}
 seqlist3=seqlist2
-seqlist3 <- as.tibble(seqlist2) %>%select(1,4)
-colnames(seqlist3) = c("processid", "retrieved_seq")
+class(seqlist3)
+seqlist3combo <- seqlist3 %>% unite("name", 1:2, na.rm = TRUE, remove = TRUE)
 ```
 
 
 now seqlist3 contains the data we need to merge with our original file. "retrieved_seq" is the column with our retrieved sequences.  
 ```{r}
-sequence_merge_main <- merge(seqlist3, bdj, by = "processid")
+#sequence_merge_main <- merge(seqlist3, bdj, by = "processid")
+#sequence_merge_main <- merge(seqlist2, bdj, by = "id")
 ```
 
 Our retrieved sequences and the original "bdj" file are merged by the "processid" column into the "sequence_merge_main" dataframe. This is now the dataframe for the first steps of the tree. 
 Next step is to make the fasta file for the tree. 
 Credit below code: Seth Bannister https://stackoverflow.com/questions/23374100/convert-table-into-fasta-in-r
 ```{r}
-names <- (seqlist3$processid)
-sequences <- (seqlist3$retrieved_seq)
-dfintermediate <- data.frame(names,sequences)
-df1.fasta = dataframe2fas(dfintermediate, file = "df1.fasta")
+#seqlist3df <- as.data.frame(IDs = seqlist3$processid, names = seqlist3$names, sequences = eqlist3$retrieved_seq)
+#class(seqlist3)
+#names <- (seqlist3$names)
+#sequences <- (seqlist3$retrieved_seq)
+#dfseqlist3 <- data.frame(IDs,names,sequences)
+
+#seqlist3_df2 <- as.tibble(seqlist3)
+#df_seqlist3.fasta = dataframe2fas(seqlist3_df2, file = "df_seqlist3.fasta")
+seqlist3combo_df <- as.data.frame(seqlist3combo)
+class(seqlist3combo_df)
+#seqlist3_ <- as.tibble(seqlist3)
+#seqlist3.fasta = dataframe2fas(seqlist3_df2, file = "df_seqlist3.fasta")
+seqlist3.fasta = dataframe2fas(seqlist3combo_df, file = "seqlist3.fasta")
 ```
 df.fasta1 is our new fasta file. Now we will use "msa" to align the reads. 
 ```{r}
 #fastatry <- system.file("df1.fasta", package = "msa"
-mySequences <- readDNAStringSet("df1.fasta")
-mySequences
+#mySequences <- readDNAStringSet("df1.fasta")
+#mySequences
+mySequences1 <- readDNAStringSet("seqlist3.fasta")
+mySequences1
 ```
-Next align the sequences. 
-```{r}
-#The below code is extremely taxing and produces an incorrect alignment. 
-#myFirstAlignment <- msa(mySequences)
-#myFirstAlignmentconvert <- myFirstAlignment
-```
-
-
-```{r, chunk111}
-
-#Looks perfect!
-
-#msaPrettyPrint(myFirstAlignment, output="pdf", showNames="none",
-#showLogo="none", askForOverwrite=FALSE, verbose=FALSE)
-```
-```{r}
-#alignmentConvert <- msaConvert(myFirstAlignmentconvert, "seqinr::alignment")
-#alignConvert <- msaConvert(myFirstAlignmentconvert, "bios2mds::align")
-```
-The below code is credit to https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html#step_1
-```{r}
-library(ape)
-#dna <- fasta2DNAbin("df1.fasta")
-#Dis_pairwise <- dist.dna(dna, model = "TN93")
-#length(Dis_pairwise)
-#number of pairwise distances, computed as n(n-1)/2
-```
-The number of pairwise distances is 7626. 
-
-The problem here, I think, is that we need to plot the heatmap of the pairwise distances. 
-
-
-```{r}
-#temp <- as.data.frame(as.matrix(Dis_pairwise))
-#table.paint(temp, clegend = 1, clabel.row= 1, clabel.col= 1)
-#table.paint(D, x = 1:ncol(df), y = nrow(df):1, 
-    #row.labels = row.names(df), col.labels = names(df), 
-    #clabel.row = 1, clabel.col = 1, csize = 1, clegend = 1)
-```
-```{r}
-#table.paint(temp, x = 1:ncol(temp), y = nrow(temp):1, 
-    #row.labels = row.names(temp), col.labels = names(temp), 
-    #clabel.row = 1, clabel.col = 1, csize = 1, clegend = 1)
-#this is not populating the visualization right
-```
-
-```{r}
-#tutorial
-#dna1 <- fasta2DNAbin(file="http://adegenet.r-forge.r-project.org/files/usflu.fasta")
-#annot <- read.csv("http://adegenet.r-forge.r-project.org/files/usflu.annot.csv", header=TRUE, row.names=1)
-#annot
-#library(ape)
-#D1 <- dist.dna(dna1, model = "TN93")
-#length(D1) #number of pairwise distances, computed as n(n-1)/2
-#bemp <- as.data.frame(as.matrix(D1))
-#table.paint(bemp, cleg=0, clabel.row=.5, clabel.col=.5) #darker shades of gray mean a larger distance # you can also make cool color plots but they're much more complicated because they use the image() function
-```
-
-
-```{r}
-#tutorial
-#This block is an attempt to make a heatmap from our msa multiple sequence alignments
-
-```
-```{r}
-library(ggimage)
-library(ggtree)
-library(TDbook)
-# load `tree_boots`, `df_tip_data`, and `df_inode_data` from 'TDbook'
-p <- ggtree(tree_boots) %<+% df_tip_data + xlim(-.1, 4)
-p2 <- p + geom_tiplab(offset = .6, hjust = .5) +
-    geom_tippoint(aes(shape = trophic_habit, color = trophic_habit, 
-                size = mass_in_kg)) + 
-    theme(legend.position = "right") + 
-    scale_size_continuous(range = c(3, 10))
-
-p2 %<+% df_inode_data + 
-    geom_label(aes(label = vernacularName.y, fill = posterior)) + 
-    scale_fill_gradientn(colors = RColorBrewer::brewer.pal(3, "YlGnBu"))
-```
-
-```{r}
-#library("Biostrings")
-#library("seqinr")
-#library("ape")
-#install.packages("phylogram")
-#library("phylogram")
-#install.packages("dendextend")
-#library("dendextend")
-
-#fasta.res <- read.alignment(file = "df1.fasta", format = "fasta")
-#fasta.res.dist.alignment = dist.alignment(msf.res, matrix = "identity")
-#fasta.res.dist.alignment.nj = nj(fasta.res.dist.alignment)
-#plot(fasta.res.dist.alignment.nj, main = "from fasta files")
-```
-
-
-```{r}
-#tre <- nj(D)
-#class(tre) #all trees created using {ape} package will be of class phylo
-
-
-```
-
-We think we have met a dead end here. We will try working with the fuzzy script, from start to end. 
+These sequences appear to be correctly aligned. 
