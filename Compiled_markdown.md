@@ -361,7 +361,9 @@ dataframe:
 phylo_bold_df<- as.data.frame(matrix(unlist(phylo_bold, use.names = FALSE), ncol = 4, byrow= TRUE))
 ```
 
-We
+After making the phylo_bold output into a dataframe, we trim out an
+redundant column and name the three remaining columns “ID”, “name”, and
+“sequence”.
 
 ``` r
 phylo_bold_trim <- as.tibble(phylo_bold_df) %>%select(1,2,4)
@@ -377,11 +379,10 @@ phylo_bold_trim <- as.tibble(phylo_bold_df) %>%select(1,2,4)
 colnames(phylo_bold_trim) = c("ID", "name", "sequence")
 ```
 
-Now “phylo_bold_trim” is trimmed of unnecessary columns, in proper
-format. The final goal for this object is to read into a fasta file.
-Before we do that, we need to combine the “ID” and “name” columns into
-one column. After doing this, we check to see what class our object is.
-We need it to be one dataframe.
+The final goal for this object is to read into a fasta file. Before we
+do that, we need to combine the “ID” and “name” columns into one column.
+After doing this, we check to see what class our object is. We need it
+to be one dataframe.
 
 ``` r
 phylo_bold_combo<- phylo_bold_trim %>% unite("name", 1:2, na.rm = TRUE, remove = TRUE)
