@@ -5,11 +5,6 @@ date: '2022-04-20'
 ---
 First, I will load in the packages (tidyverse, lemon, knitr). This code is in the script but not knit to the markdown document for readability. 
 ```{r,setup, include=FALSE}
-getwd()
-```
-
-
-```{r,setup, include=FALSE}
 library(tidyverse)
 library(lemon)
 library(knitr)
