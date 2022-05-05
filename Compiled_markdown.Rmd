@@ -1,42 +1,27 @@
 ---
 title: "Compiled_data_inspect"
-output: html_document
+output: github_document
 date: '2022-05-05'
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ```{r,setup, include=FALSE}
 getwd()
 library(tidyverse)
-library(lemon)
 library(knitr)
 library(janitor)
 library(dplyr )
 library(ggplot2)
 library(reshape2)
 library(bold)
-library(spider)
-library(data.table)
 library(msa)
-library(ggtree)
-library(treeio)
-library(phangorn)
 library(seqRFLP)
-library(ape)
-library(adegenet)
-library(ade4)
-library(ggimage)
-library(TDbook)
+
+
 #if (!requireNamespace("BiocManager", quietly=TRUE))
 #install.packages("BiocManager")
 #BiocManager::install("msa")
 #if (!require("BiocManager", quietly = TRUE))
     #install.packages("BiocManager")
-
-
 #BiocManager::install("ggtree")
 ```
 
@@ -107,20 +92,34 @@ ggplot(bdj, aes(x=reorder(genus_name, genus_name, function(x)-length(x)),fill=ge
 Next read the "bdj' object into a new object (called "phylo"). We can work with the phylo object moving forward. 
 ```{r}
 phylo <- bdj
-#length(is.na(phylo$bin_uri))
-#length(!is.na(phylo$bin_uri))
-#view(phylo)
-#sum(is.na(phylo$bin_uri))
 ```
 Now we prepare to retrieve the BOLD sequence data. 
 ```{r}
-#phylo_bold <- bold_seq(taxon = NULL, ids = phylo$processid, bin = phylo$bin_uri, container = NULL, institutions = NULL, 
-                  #researchers = NULL, geo = NULL, marker = "COI-5P", #response = FALSE)
 phylo_bold <- bold_seq(taxon = NULL, ids = phylo$processid, bin = phylo$bin_uri, container = NULL, institutions = NULL, 
                   researchers = NULL, geo = NULL, marker = "COI-5P", response = FALSE)
-#I believe the above code ran ok, but we have 115 rows instead of 124 now. So we will double check. 
 ```
+
 Here we matched the bin_uri information to the BOLD database, retrieved the sequence. And next we checked manually the first few entries against the NCBI database to double check the correct species was identified. We used process_id and bin_uri to define the gene and the species. 
+
+Before we move on, however, we need to check whether there are 124 unique "bin_uri"s in our file. 
+
+```{r}
+bdj%>% filter(!duplicated(.[["bin_uri"]])) -> unique_binuri
+```
+There are only 48 unique bin_uri entries. 
+
+Now we check whether there are 124 unique process ids. 
+```{r}
+bdj%>% filter(!duplicated(.[["processid"]])) -> unique_processid
+```
+There are, in fact, 124 unique processids. This is correct and to be expected. 
+
+We also want to know whether there are any NAs in the bin_uri column of phylo. 
+
+```{r}
+sum(is.na(phylo$bin_uri))
+```
+There are 9 NAs in the bin_uri column. This is important to know moving forward because we can expect to return 115 sequences instead of 124. 
 
 Next we make the BOLD output object (phylo_bold) into a dataframe. 
 
@@ -130,12 +129,13 @@ Credit for below code which we used to transform phylo_bold into a dataframe: ht
 phylo_bold_df<- as.data.frame(matrix(unlist(phylo_bold, use.names = FALSE), ncol = 4, byrow= TRUE))
 ```
 
-We 
+After making the phylo_bold output into a dataframe, we trim out an redundant column and name the three remaining columns "ID", "name", and "sequence". 
 ```{r}
 phylo_bold_trim <- as.tibble(phylo_bold_df) %>%select(1,2,4)
 colnames(phylo_bold_trim) = c("ID", "name", "sequence")
 ```
-Now "phylo_bold_trim" is trimmed of unnecessary columns, in proper format. The final goal for this object is to read into a fasta file. Before we do that, we need to combine the "ID" and "name" columns into one column. After doing this, we check to see what class our object is. We need it to be one dataframe. 
+The final goal for this object is to read into a fasta file. Before we do that, we need to combine the "ID" and "name" columns into one column. After doing this, we check to see what class our object is. We need it to be one dataframe. 
+
 ```{r}
 phylo_bold_combo<- phylo_bold_trim %>% unite("name", 1:2, na.rm = TRUE, remove = TRUE)
 class(phylo_bold_combo)
@@ -151,7 +151,6 @@ We now use the msa package to align the sequences in our fasta file.
 ```{r}
 mySequencesphylo <- readDNAStringSet("phylo_bold.fasta")
 phylo_alignment <- msa(mySequencesphylo)
-
 phylo_alignment
 ```
 ```
