@@ -20,7 +20,7 @@ The main figure in this paper was the phylogenetic tree they created. This tree 
 We worked to replicate the phylogenetic tree from our chosen paper. We accomplished this using R, Python, and ClustalW. 
 Initial data inspection and all parts of our process up until sequence alignment was completed in R. This is documented in our “Arthropod_markdown.md” file.  We relied on a number of packages, including tidyverse, to read BOLD sequence identifiers from the BOLD database and into our dataframe, and eventually output a fasta file (“phylo_bold.fasta”) which contains sequences with which to make our tree. 
 
-After this point, we moved into Python. We used the biopython package to align sequences, create an unrooted phylogenetic tree which we output as a .nwk file (tree.nwk). 
+After this point, we moved into Python. We used the biopython package to align sequences, create an unrooted phylogenetic tree which we output as a .nwk file (tree.nwk). This file was then imported into MEGA X v 11.0.11 so it can be converted and exported as a PNG file called treefinal.png.
 
 ## Summarization of replication of results
 Replication of Analyses
