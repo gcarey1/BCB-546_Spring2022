@@ -7,6 +7,8 @@
 <br />
 <br />-Results Directory
 <br />
+<br />Kuralt-2022.md
+<br />
 <br />
 <br />--Code Directory
 <br />
@@ -24,3 +26,7 @@ and the output files of the python script (bug_tree.nex, bug_tree.xml).
 <br />
 <br />This directory contains the output and results files for our codes. 
 <br />It contains a copy of our fasta file which was created by the R script, along with a .nwd file of our phylogenetic tree (tree.nwk). 
+<br />
+<br />--Kuralt-2022.md
+<br />
+<br />This is a .md file that includes an introduction to the paper, explanation of the technical details of our replication of analyses and a summary of our replication of the original results.
