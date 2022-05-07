@@ -2,7 +2,7 @@
 title: "Kuralt-2022"
 author: "Razan Alsayed Omar"
 date: '2022-05-07'
-output: html_document
+output: github_document
 ---
 
 ## Introduction
