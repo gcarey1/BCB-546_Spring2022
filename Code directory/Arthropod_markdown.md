@@ -1,6 +1,14 @@
-Compiled_data_inspect
+Arthropod_markdown
 ================
 2022-05-05
+
+First retrieve all necessary packages from the library. Note, this
+(hidden) code also includes a chunk (commented-out) to install
+Bioc-manager and msa if needed. This chunk is included because their
+installation directly from R markdown is not possible.
+
+Packages: -tidyverse -knitr -janitor -dplyr -ggplot2 -reshape2 -bold
+-msa -seqRFLP
 
 I also read in the “DS-KROK4BDJ.txt” file, which is a tsv downloaded
 from our paper of choice and (I believe) contains all the data we will
@@ -289,8 +297,8 @@ ggplot(bdj, aes(x=reorder(family_name, family_name, function(x)-length(x)),fill=
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-![](Compiled_markdown_files/figure-gfm/unnamed-chunk-5-1.png)<!-- --> Do
-the same thing for genus:
+![](Arthropod_markdown_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+Do the same thing for genus:
 
 ``` r
 ggplot(bdj, aes(x=reorder(genus_name, genus_name, function(x)-length(x)),fill=genus_name)) +
@@ -301,7 +309,7 @@ ggplot(bdj, aes(x=reorder(genus_name, genus_name, function(x)-length(x)),fill=ge
   theme(legend.position="none") 
 ```
 
-![](Compiled_markdown_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Arthropod_markdown_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 Next read the “bdj’ object into a new object (called”phylo”). We can
 work with the phylo object moving forward.
 
@@ -441,4 +449,6 @@ phylo_alignment
     ## [115] -------------------------...TTGGCC------------------ KROK031-19_Striga...
     ##   Con -------------------------...------------------------ Consensus
 
-\`\`\`
+phylo_alignment contains aligned sequences. But, moving forward, we will
+be using the phylo_bold.fasta file and move to python where we will
+construct the tree.

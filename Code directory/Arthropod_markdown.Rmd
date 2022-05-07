@@ -1,11 +1,22 @@
 ---
-title: "Compiled_data_inspect"
+title: "Arthropod_markdown"
 output: github_document
 date: '2022-05-05'
 ---
+First retrieve all necessary packages from the library. Note, this (hidden) code also includes a chunk (commented-out) to install Bioc-manager and msa if needed. This chunk is included because their installation directly from R markdown is not possible. 
 
-```{r,setup, include=FALSE}
-getwd()
+Packages:
+-tidyverse
+-knitr
+-janitor
+-dplyr
+-ggplot2
+-reshape2
+-bold
+-msa
+-seqRFLP
+
+```{r, setup, include=FALSE}
 library(tidyverse)
 library(knitr)
 library(janitor)
@@ -153,5 +164,6 @@ mySequencesphylo <- readDNAStringSet("phylo_bold.fasta")
 phylo_alignment <- msa(mySequencesphylo)
 phylo_alignment
 ```
-```
+phylo_alignment contains aligned sequences. But, moving forward, we will be using the phylo_bold.fasta file and move to python where we will construct the tree. 
+
 
