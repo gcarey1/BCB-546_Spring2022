@@ -1,4 +1,4 @@
-# BCB546-Spring2022_final_collab
+# BCB546_Spring2022-Project
 <br />This repository contains three file folders. These are:
 <br />
 <br />-Code Directory
