@@ -7,7 +7,11 @@
 <br />
 <br />-Results Directory
 <br />
+<<<<<<< HEAD
 <br />Kuralt-2022.md
+=======
+<br />-Kuralt-2022.md
+>>>>>>> 54827b61482005c516d6ade87ce41f33d7db375a
 <br />
 <br />
 <br />--Code Directory
@@ -29,4 +33,8 @@ and the output files of the python script (bug_tree.nex, bug_tree.xml).
 <br />
 <br />--Kuralt-2022.md
 <br />
+<<<<<<< HEAD
 <br />This is a .md file that includes an introduction to the paper, explanation of the technical details of our replication of analyses and a summary of our <br /<br />replication of the original results.
+=======
+<br />This is a .md file that includes an introduction to the paper, explanation of the technical details of our replication of analyses and a summary of our replication of the original results.
+>>>>>>> 54827b61482005c516d6ade87ce41f33d7db375a
